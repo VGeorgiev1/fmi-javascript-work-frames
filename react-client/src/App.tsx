@@ -1,25 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Navigate, RouterProvider, Routes, Route, BrowserRouter as Router, useNavigate } from 'react-router-dom';
+import Home from './Home';
+import Login from './Login';
+import Register from './Register';
+import { AuthProvider, useAuth } from './AuthContext'
+
+
 
 function App() {
+
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+  console.log(window.location.pathname)
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+
+        <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+        </Routes>
+    </AuthProvider>
   );
 }
 

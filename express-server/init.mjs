@@ -11,8 +11,9 @@ try {
     const result = await client.query(`
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
-            username VARCHAR(255),
+            username VARCHAR(255) UNIQUE,
             password VARCHAR(255) NOT NULL,
+            email text UNIQUE,
             profile_image text,
             age integer
         );

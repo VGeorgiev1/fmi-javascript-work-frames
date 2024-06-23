@@ -2,39 +2,27 @@ import pg from 'pg'
 import { config } from 'dotenv'
 import { exit } from 'process';
 
-const { Client } = pg
-const client = new Client()
-
-const query= ({ query , params }) => {
-
-}
-
-
-await client.connect()
-try {
-} catch(e) {
-
-}
+const { Pool } = pg
 
 class DBHelper {
-    constructor(config) {
-        if(!config) {
+    constructor(conf) {
+        if(!conf) {
             config();
-            this.client = new Client();
+            this.pool = new Pool();
         } else {
-            this.client = new Client(config);
+            this.pool = new Pool(conf);
         }
     }
-    async query( { query, params } ) {
+    async query( query, params ) {
         try{
-            await client.connect()
+            let client = await this.pool.connect();
             const result = await client.query(query, params)
-            return result;
+            await client.release();
+            return result.rows;
         } catch (e) {
             return { error: e }
         }
     }
-    async end() {
-        await client.end()
-    }
 }
+
+export default DBHelper;
